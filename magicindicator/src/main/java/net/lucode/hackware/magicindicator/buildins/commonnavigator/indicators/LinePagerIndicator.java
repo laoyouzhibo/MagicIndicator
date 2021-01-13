@@ -69,13 +69,17 @@ public class LinePagerIndicator extends View implements IPagerIndicator {
         }
 
         // 计算颜色
-        if (mColors != null && mColors.size() > 0) {
-            int currentColor = mColors.get(Math.abs(position) % mColors.size());
-            int nextColor = mColors.get(Math.abs(position + 1) % mColors.size());
-            int color = ArgbEvaluatorHolder.eval(positionOffset, currentColor, nextColor);
-            mPaint.setColor(color);
+        if (mColors != null) {
+            if (mColors.size() == 1) {
+                mPaint.setColor(mColors.get(0));
+            } else if (mColors.size() > 1) {
+                int currentColor = mColors.get(Math.abs(position) % mColors.size());
+                int nextColor = mColors.get(Math.abs(position + 1) % mColors.size());
+                int color = ArgbEvaluatorHolder.eval(positionOffset, currentColor, nextColor);
+                mPaint.setColor(color);
+            }
         }
-
+        
         // 计算锚点位置
         PositionData current = FragmentContainerHelper.getImitativePositionData(mPositionDataList, position);
         PositionData next = FragmentContainerHelper.getImitativePositionData(mPositionDataList, position + 1);
@@ -120,6 +124,10 @@ public class LinePagerIndicator extends View implements IPagerIndicator {
     @Override
     public void onPositionDataProvide(List<PositionData> dataList) {
         mPositionDataList = dataList;
+    }
+
+    public RectF getLineRect() {
+        return mLineRect;
     }
 
     public float getYOffset() {
